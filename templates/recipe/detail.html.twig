@@ -1,4 +1,3 @@
-
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ recipe.title }} — Вкусно дома{% endblock %}
@@ -14,7 +13,7 @@
 
         <div class="detail-header">
             <div class="detail-image">
-                <img src="{{ asset('images/photo-1547592180-85f173990554.jfif') }}" alt="{{ recipe.title }}">
+                <img src="{{ asset('images/' ~ recipe.image) }}" alt="{{ recipe.title }}">
             </div>
 
             <div class="detail-intro">
@@ -24,7 +23,6 @@
 
                 <div class="recipe-meta">
                     <span>◷ {{ recipe.time }} минут</span>
-                    <span>Порций: {{ recipe.servings }}</span>
                 </div>
             </div>
         </div>
@@ -32,11 +30,37 @@
         <div class="detail-content">
             <div class="ingredients">
                 <h2>Ингредиенты</h2>
-                <ul>
+
+                <div class="servings-control">
+                    <label for="servings">Количество порций:</label>
+                    <input
+                        type="number"
+                        id="servings"
+                        min="1"
+                        max="20"
+                        value="{{ recipe.servings }}"
+                    >
+                </div>
+
+                <ul id="ingredients-list"
+                    data-base-servings="{{ recipe.servings }}">
+
                     {% for ingredient in recipe.ingredients %}
-                        <li>{{ ingredient }}</li>
+                        <li>
+                            {{ ingredient.name }} —
+                            <span
+                                class="ingredient-quantity"
+                                data-quantity="{{ ingredient.quantity }}">
+                                {{ ingredient.quantity }}
+                            </span>
+                            {{ ingredient.unit }}
+                        </li>
                     {% endfor %}
                 </ul>
+
+                <p class="calculator-note">
+                    Количество ингредиентов изменяется автоматически.
+                </p>
             </div>
 
             <div class="cooking-steps">
@@ -131,6 +155,24 @@
         box-shadow: 0 5px 20px rgba(61, 48, 41, 0.06);
     }
 
+    .servings-control {
+        margin-bottom: 20px;
+        color: #65574e;
+    }
+
+    .servings-control label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .servings-control input {
+        width: 85px;
+        padding: 9px;
+        border: 1px solid #e5d5c8;
+        border-radius: 6px;
+        font-size: 16px;
+    }
+
     .ingredients ul,
     .cooking-steps ol {
         padding-left: 22px;
@@ -142,6 +184,12 @@
         color: #65574e;
         line-height: 1.6;
         border-bottom: 1px solid #f0e5d9;
+    }
+
+    .calculator-note {
+        color: #82756b;
+        font-size: 12px;
+        margin-top: 18px;
     }
 
     @media (max-width: 750px) {
@@ -159,5 +207,39 @@
         }
     }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const servingsInput = document.getElementById('servings');
+        const ingredientsList = document.getElementById('ingredients-list');
+
+        const baseServings = Number(ingredientsList.dataset.baseServings);
+        const quantities = document.querySelectorAll('.ingredient-quantity');
+
+        function updateIngredients() {
+            let servings = Number(servingsInput.value);
+
+            if (!Number.isFinite(servings) || servings < 1) {
+                servings = 1;
+                servingsInput.value = 1;
+            }
+
+            if (servings > 20) {
+                servings = 20;
+                servingsInput.value = 20;
+            }
+
+            quantities.forEach(function (element) {
+                const baseQuantity = Number(element.dataset.quantity);
+                const newQuantity = baseQuantity * servings / baseServings;
+
+                element.textContent = Number(newQuantity.toFixed(2))
+                    .toLocaleString('ru-RU');
+            });
+        }
+
+        servingsInput.addEventListener('input', updateIngredients);
+    });
+</script>
 
 {% endblock %}
