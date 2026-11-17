@@ -1,0 +1,163 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ recipe.title }} — Вкусно дома{% endblock %}
+
+{% block body %}
+
+<section class="detail-page">
+    <div class="container">
+
+        <a href="{{ path('app_recipes') }}" class="back-link">
+            ← Вернуться к рецептам
+        </a>
+
+        <div class="detail-header">
+            <div class="detail-image">
+                <img src="{{ asset('images/photo-1547592180-85f173990554.jfif') }}" alt="{{ recipe.title }}">
+            </div>
+
+            <div class="detail-intro">
+                <span class="category-label">{{ recipe.category|upper }}</span>
+                <h1>{{ recipe.title }}</h1>
+                <p>{{ recipe.description }}</p>
+
+                <div class="recipe-meta">
+                    <span>◷ {{ recipe.time }} минут</span>
+                    <span>Порций: {{ recipe.servings }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-content">
+            <div class="ingredients">
+                <h2>Ингредиенты</h2>
+                <ul>
+                    {% for ingredient in recipe.ingredients %}
+                        <li>{{ ingredient }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="cooking-steps">
+                <h2>Способ приготовления</h2>
+
+                <ol>
+                    {% for step in recipe.steps %}
+                        <li>{{ step }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<style>
+    .detail-page {
+        padding: 45px 0 70px;
+    }
+
+    .back-link {
+        display: inline-block;
+        color: #b85c38;
+        margin-bottom: 30px;
+        font-weight: 500;
+    }
+
+    .detail-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: center;
+        margin-bottom: 55px;
+    }
+
+    .detail-image {
+        height: 350px;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .detail-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .category-label {
+        color: #b85c38;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 2px;
+    }
+
+    .detail-intro h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 38px;
+        margin: 18px 0;
+    }
+
+    .detail-intro p {
+        color: #82756b;
+        line-height: 1.7;
+    }
+
+    .recipe-meta {
+        display: flex;
+        gap: 25px;
+        margin-top: 25px;
+        color: #b85c38;
+        font-weight: 500;
+    }
+
+    .detail-content {
+        display: grid;
+        grid-template-columns: 0.8fr 1.2fr;
+        gap: 50px;
+    }
+
+    .detail-content h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 27px;
+        margin-bottom: 25px;
+    }
+
+    .ingredients,
+    .cooking-steps {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(61, 48, 41, 0.06);
+    }
+
+    .ingredients ul,
+    .cooking-steps ol {
+        padding-left: 22px;
+    }
+
+    .ingredients li,
+    .cooking-steps li {
+        padding: 10px 0;
+        color: #65574e;
+        line-height: 1.6;
+        border-bottom: 1px solid #f0e5d9;
+    }
+
+    @media (max-width: 750px) {
+        .detail-header,
+        .detail-content {
+            grid-template-columns: 1fr;
+        }
+
+        .detail-image {
+            height: 250px;
+        }
+
+        .detail-intro h1 {
+            font-size: 30px;
+        }
+    }
+</style>
+
+{% endblock %}

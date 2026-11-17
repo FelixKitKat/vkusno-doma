@@ -102,12 +102,14 @@
     <div class="container header-inner">
         <a href="{{ path('app_home') }}" class="logo">Вкусно дома</a>
 
+
         <nav>
             <a href="{{ path('app_home') }}">Главная</a>
-            <a href="#">Рецепты</a>
-            <a href="#">Категории</a>
-            <a href="#">О проекте</a>
+            <a href="{{ path('app_recipes') }}">Рецепты</a>
+            <a href="{{ path('app_recipes') }}">Категории</a>
+            <a href="#about">О проекте</a>
         </nav>
+
     </div>
 </header>
 
