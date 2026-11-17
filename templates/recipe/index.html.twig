@@ -1,3 +1,4 @@
+
 {% extends 'base.html.twig' %}
 
 {% block title %}Рецепты — Вкусно дома{% endblock %}
@@ -12,9 +13,21 @@
             <p>Выбирайте любимые блюда и вдохновляйтесь на новые кулинарные открытия!</p>
         </div>
 
-        <div class="recipe-grid">
+        <div class="recipe-search">
+            <input
+                type="text"
+                id="recipeSearch"
+                placeholder="🔍 Найти рецепт или категорию..."
+                aria-label="Поиск рецептов"
+            >
+        </div>
+
+        <div class="recipe-grid" id="recipeGrid">
             {% for recipe in recipes %}
-                <article class="recipe-card">
+                <article
+                    class="recipe-card"
+                    data-search="{{ (recipe.title ~ ' ' ~ recipe.category ~ ' ' ~ recipe.description)|lower }}"
+                >
                     <div class="recipe-image">
                         <img
                             src="{{ asset('images/' ~ recipe.image) }}"
@@ -41,6 +54,10 @@
                 <p>Пока рецептов нет.</p>
             {% endfor %}
         </div>
+
+        <p id="noResults" class="no-results" hidden>
+            К сожалению, ничего не найдено. Попробуйте другое название.
+        </p>
     </div>
 </section>
 
@@ -51,7 +68,7 @@
 
     .catalog-heading {
         text-align: center;
-        margin-bottom: 45px;
+        margin-bottom: 35px;
     }
 
     .catalog-heading span {
@@ -72,6 +89,29 @@
         line-height: 1.6;
     }
 
+    .recipe-search {
+        max-width: 550px;
+        margin: 0 auto 40px;
+    }
+
+    .recipe-search input {
+        width: 100%;
+        padding: 15px 20px;
+        border: 1px solid #e5d5c8;
+        border-radius: 8px;
+        background: white;
+        color: #3d3029;
+        font-size: 15px;
+        outline: none;
+        box-sizing: border-box;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .recipe-search input:focus {
+        border-color: #b85c38;
+        box-shadow: 0 0 0 3px rgba(184, 92, 56, 0.1);
+    }
+
     .recipe-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -88,6 +128,10 @@
 
     .recipe-card:hover {
         transform: translateY(-5px);
+    }
+
+    .recipe-card[hidden] {
+        display: none;
     }
 
     .recipe-image {
@@ -156,6 +200,12 @@
         text-decoration: underline;
     }
 
+    .no-results {
+        text-align: center;
+        color: #82756b;
+        padding: 30px 10px;
+    }
+
     @media (max-width: 750px) {
         .recipe-grid {
             grid-template-columns: 1fr;
@@ -166,5 +216,36 @@
         }
     }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('recipeSearch');
+        const recipeCards = document.querySelectorAll('.recipe-card');
+        const noResults = document.getElementById('noResults');
+
+        searchInput.addEventListener('input', function () {
+            const searchText = searchInput.value
+                .trim()
+                .toLocaleLowerCase('ru-RU');
+
+            let visibleCount = 0;
+
+            recipeCards.forEach(function (card) {
+                const recipeText = card.dataset.search
+                    .toLocaleLowerCase('ru-RU');
+
+                const matches = recipeText.includes(searchText);
+
+                card.hidden = !matches;
+
+                if (matches) {
+                    visibleCount++;
+                }
+            });
+
+            noResults.hidden = visibleCount > 0;
+        });
+    });
+</script>
 
 {% endblock %}
