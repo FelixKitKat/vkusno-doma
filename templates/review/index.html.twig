@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Оставить отзыв — Вкусно дома{% endblock %}
+
+{% block body %}
+<div class="container" style="max-width: 700px; margin: 50px auto; padding: 30px;">
+    <h1>Оставить отзыв</h1>
+
+    <p>Рецепт: <strong>{{ recipe.title }}</strong></p>
+
+    {{ form_start(form) }}
+
+        <div style="margin-bottom: 20px;">
+            {{ form_row(form.author) }}
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            {{ form_row(form.content) }}
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            {{ form_row(form.rating) }}
+        </div>
+
+        <button type="submit" class="btn">
+            Отправить отзыв
+        </button>
+
+    {{ form_end(form) }}
+
+    <p style="margin-top: 20px;">
+        <a href="{{ path('app_recipe_detail', {id: recipe.id}) }}">
+            Вернуться к рецепту
+        </a>
+    </p>
+</div>
+{% endblock %}

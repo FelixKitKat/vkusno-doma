@@ -46,6 +46,7 @@ class RecipeDetailController extends AbstractController
 
         return $this->render('recipe/detail.html.twig', [
             'recipe' => [
+                'id' => $recipe->getId(),
                 'title' => $recipe->getTitle(),
                 'category' => $recipe->getCategory(),
                 'time' => $recipe->getCookingTime(),
@@ -54,6 +55,7 @@ class RecipeDetailController extends AbstractController
                 'servings' => $recipe->getServings(),
                 'ingredients' => $ingredients,
                 'steps' => $steps,
+                'reviews' => $recipe->getReviews(),
             ],
         ]);
     }
