@@ -29,10 +29,15 @@
                     data-search="{{ (recipe.title ~ ' ' ~ recipe.category ~ ' ' ~ recipe.description)|lower }}"
                 >
                     <div class="recipe-image">
-                        <img
-                            src="{{ asset('images/' ~ recipe.image) }}"
-                            alt="{{ recipe.title }}"
-                        >
+                        {% if recipe.image %}
+                            <img
+                                src="{{ asset('images/' ~ recipe.image) }}"
+                                alt="{{ recipe.title }}"
+                            >
+                        {% else %}
+                            <div class="no-image">Фото скоро появится</div>
+                        {% endif %}
+
                         <span>{{ recipe.category|upper }}</span>
                     </div>
 
@@ -41,17 +46,23 @@
                         <p>{{ recipe.description }}</p>
 
                         <div class="recipe-bottom">
-                            <span class="recipe-time">◷ {{ recipe.time }} минут</span>
+                            <span class="recipe-time">
+                                ◷ {{ recipe.cookingTime }} минут
+                            </span>
 
-                            <a href="{{ path('app_recipe_detail', {id: loop.index}) }}"
-                               class="recipe-link">
+                            <a
+                                href="{{ path('app_recipe_detail', {id: recipe.id}) }}"
+                                class="recipe-link"
+                            >
                                 Читать рецепт →
                             </a>
                         </div>
                     </div>
                 </article>
             {% else %}
-                <p>Пока рецептов нет.</p>
+                <p class="empty-catalog">
+                    Пока рецептов нет. Скоро здесь появятся вкусные идеи!
+                </p>
             {% endfor %}
         </div>
 
@@ -138,6 +149,7 @@
         height: 190px;
         position: relative;
         overflow: hidden;
+        background: #f0e5da;
     }
 
     .recipe-image img {
@@ -157,6 +169,14 @@
         border-radius: 4px;
         font-size: 11px;
         font-weight: 700;
+    }
+
+    .no-image {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #82756b;
     }
 
     .recipe-info {
@@ -200,7 +220,8 @@
         text-decoration: underline;
     }
 
-    .no-results {
+    .no-results,
+    .empty-catalog {
         text-align: center;
         color: #82756b;
         padding: 30px 10px;
