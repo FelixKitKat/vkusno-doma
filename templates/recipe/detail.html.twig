@@ -1,21 +1,254 @@
-<section style="margin-top: 50px;">
-    <h2>Отзывы о рецепте</h2>
 
-    {% if recipe.reviews is not empty %}
-        {% for review in recipe.reviews %}
-            <div style="background: #fff; padding: 20px; margin: 15px 0; border-radius: 12px;">
-                <strong>{{ review.author }}</strong>
-                <p style="color: #b85c38;">
-                    Оценка: {{ review.rating }} / 5
-                </p>
-                <p>{{ review.content }}</p>
-            </div>
-        {% endfor %}
-    {% else %}
-        <p>Пока отзывов нет. Будьте первым!</p>
-    {% endif %}
+{% extends 'base.html.twig' %}
 
-    <a href="{{ path('app_review_new', {id: recipe.id}) }}" class="btn">
-        Оставить отзыв
+{% block title %}{{ recipe.title }} — Вкусно дома{% endblock %}
+
+{% block body %}
+
+<div class="container recipe-detail">
+
+    <a href="{{ path('app_recipes') }}" class="back-link">
+        ← Вернуться к рецептам
     </a>
-</section>
+
+    <div class="recipe-header">
+        <div>
+            <span class="category-label">{{ recipe.category|upper }}</span>
+            <h1>{{ recipe.title }}</h1>
+            <p>{{ recipe.description }}</p>
+            <span class="recipe-time">◷ {{ recipe.time }} минут</span>
+        </div>
+
+        {% if recipe.image %}
+            <img
+                src="{{ asset('images/' ~ recipe.image) }}"
+                alt="{{ recipe.title }}"
+                class="recipe-photo"
+            >
+        {% endif %}
+    </div>
+
+    <section class="recipe-section">
+        <h2>Ингредиенты</h2>
+
+        <div class="servings-control">
+            <span>Количество порций:</span>
+            <button type="button" id="decrease">−</button>
+            <strong id="servings">{{ recipe.servings }}</strong>
+            <button type="button" id="increase">+</button>
+        </div>
+
+        <ul class="ingredients-list">
+            {% for ingredient in recipe.ingredients %}
+                <li>
+                    <span>{{ ingredient.name }}</span>
+                    <strong>
+                        <span class="quantity"
+                              data-original="{{ ingredient.quantity }}">
+                            {{ ingredient.quantity }}
+                        </span>
+                        {{ ingredient.unit }}
+                    </strong>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section class="recipe-section">
+        <h2>Приготовление</h2>
+
+        <ol class="steps-list">
+            {% for step in recipe.steps %}
+                <li>{{ step }}</li>
+            {% endfor %}
+        </ol>
+    </section>
+
+    <section class="recipe-section">
+        <h2>Отзывы о рецепте</h2>
+
+        {% if recipe.reviews is not empty %}
+            {% for review in recipe.reviews %}
+                <div class="review-card">
+                    <strong>{{ review.author }}</strong>
+                    <p class="rating">Оценка: {{ review.rating }} / 5</p>
+                    <p>{{ review.content }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Пока отзывов нет. Будьте первым!</p>
+        {% endif %}
+
+        <a href="{{ path('app_review_new', {id: recipe.id}) }}"
+           class="action-button">
+            Оставить отзыв
+        </a>
+    </section>
+
+</div>
+
+<style>
+    .recipe-detail {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .back-link {
+        color: #b85c38;
+        text-decoration: none;
+    }
+
+    .recipe-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 35px;
+        align-items: center;
+        margin: 35px 0 50px;
+    }
+
+    .recipe-header h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 38px;
+        color: #3d3029;
+    }
+
+    .recipe-header p {
+        color: #82756b;
+        line-height: 1.7;
+    }
+
+    .category-label {
+        color: #b85c38;
+        font-weight: bold;
+        letter-spacing: 2px;
+        font-size: 12px;
+    }
+
+    .recipe-photo {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 12px;
+    }
+
+    .recipe-time {
+        color: #b85c38;
+        font-weight: bold;
+    }
+
+    .recipe-section {
+        margin: 45px 0;
+    }
+
+    .recipe-section h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 28px;
+        color: #3d3029;
+    }
+
+    .servings-control {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    .servings-control button {
+        width: 35px;
+        height: 35px;
+        border: none;
+        border-radius: 6px;
+        background: #b85c38;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .ingredients-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .ingredients-list li {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 15px;
+        margin-bottom: 8px;
+        background: white;
+        border-radius: 7px;
+    }
+
+    .steps-list li {
+        padding: 12px 0;
+        line-height: 1.7;
+    }
+
+    .review-card {
+        background: white;
+        padding: 20px;
+        margin: 15px 0;
+        border-radius: 12px;
+    }
+
+    .rating {
+        color: #b85c38;
+    }
+
+    .action-button {
+        display: inline-block;
+        background: #b85c38;
+        color: white;
+        padding: 13px 22px;
+        border-radius: 6px;
+        text-decoration: none;
+        margin-top: 15px;
+    }
+
+    @media (max-width: 750px) {
+        .recipe-header {
+            grid-template-columns: 1fr;
+        }
+
+        .recipe-header h1 {
+            font-size: 30px;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const servingsElement = document.getElementById('servings');
+        const quantities = document.querySelectorAll('.quantity');
+
+        const originalServings = Number(servingsElement.textContent);
+        let currentServings = originalServings;
+
+        function updateIngredients() {
+            servingsElement.textContent = currentServings;
+
+            quantities.forEach(function (element) {
+                const originalQuantity = Number(element.dataset.original);
+                const newQuantity =
+                    originalQuantity * currentServings / originalServings;
+
+                element.textContent = Number(newQuantity.toFixed(2));
+            });
+        }
+
+        document.getElementById('increase').addEventListener('click', function () {
+            currentServings++;
+            updateIngredients();
+        });
+
+        document.getElementById('decrease').addEventListener('click', function () {
+            if (currentServings > 1) {
+                currentServings--;
+                updateIngredients();
+            }
+        });
+    });
+</script>
+
+{% endblock %}

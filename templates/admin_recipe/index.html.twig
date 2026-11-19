@@ -1,0 +1,100 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Добавить рецепт — Вкусно дома{% endblock %}
+
+{% block body %}
+
+<div class="container" style="max-width: 750px; margin: 50px auto; padding: 30px;">
+
+    <h1 style="font-family: 'Playfair Display', serif;">
+        Добавить новый рецепт
+    </h1>
+
+    <p style="color: #82756b; margin-bottom: 30px;">
+        Заполните информацию о блюде, чтобы добавить его в каталог.
+    </p>
+
+    {% for message in app.flashes('success') %}
+        <p style="color: green;">{{ message }}</p>
+    {% endfor %}
+
+    <form method="post">
+
+        <label>Название рецепта</label>
+        <input type="text" name="title" required>
+
+        <label>Описание блюда</label>
+        <textarea name="description" rows="3" required></textarea>
+
+        <label>Категория</label>
+        <select name="category" required>
+            <option value="">Выберите категорию</option>
+            <option value="Супы">Супы</option>
+            <option value="Салаты">Салаты</option>
+            <option value="Основные блюда">Основные блюда</option>
+            <option value="Десерты">Десерты</option>
+        </select>
+
+        <label>Время приготовления (минуты)</label>
+        <input type="number" name="cookingTime" min="1" required>
+
+        <label>Название файла фотографии</label>
+        <input type="text" name="image" placeholder="например, soup.jpg">
+
+        <label>Количество порций</label>
+        <input type="number" name="servings" min="1" value="2" required>
+
+        <label>Ингредиенты</label>
+        <textarea name="ingredients" rows="6" placeholder="Курица — 400 г&#10;Картофель — 3 шт." required></textarea>
+
+        <label>Приготовление</label>
+        <textarea name="instructions" rows="7" placeholder="1. Подготовьте продукты&#10;2. Приготовьте блюдо" required></textarea>
+
+        <button type="submit">Добавить рецепт</button>
+
+    </form>
+</div>
+
+<style>
+    form label {
+        display: block;
+        margin: 20px 0 8px;
+        font-weight: 600;
+        color: #3d3029;
+    }
+
+    form input,
+    form textarea,
+    form select {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px;
+        border: 1px solid #e5d5c7;
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 15px;
+        background: white;
+    }
+
+    form textarea {
+        resize: vertical;
+    }
+
+    form button {
+        margin-top: 25px;
+        padding: 14px 25px;
+        border: none;
+        border-radius: 6px;
+        background: #b85c38;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    form button:hover {
+        background: #98472b;
+    }
+</style>
+
+{% endblock %}
