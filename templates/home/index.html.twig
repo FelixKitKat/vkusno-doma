@@ -33,41 +33,36 @@
     </div>
 
     <div class="recipe-grid">
-        <article class="recipe-card">
-            <div class="recipe-image">
-                <img src="{{ asset('images/photo-1547592180-85f173990554.jfif') }}" alt="Домашний куриный суп">
-                <span>СУПЫ</span>
-            </div>
-            <div class="recipe-info">
-                <h3>Домашний куриный суп</h3>
-                <p>Лёгкий, ароматный и очень уютный обед.</p>
-                <span class="recipe-time">◷ 40 минут</span>
-            </div>
-        </article>
+        {% for recipe in recipes %}
+            <a href="{{ path('app_recipe_detail', {id: recipe.id}) }}"
+               class="recipe-card">
 
-        <article class="recipe-card">
-            <div class="recipe-image">
-                <img src="{{ asset('images/photo-1464349095431-e9a21285b5f3.jfif') }}" alt="Свежий овощной салат">
-                <span>САЛАТЫ</span>
-            </div>
-            <div class="recipe-info">
-                <h3>Свежий овощной салат</h3>
-                <p>Яркое сочетание свежих овощей и зелени.</p>
-                <span class="recipe-time">◷ 15 минут</span>
-            </div>
-        </article>
+                <div class="recipe-image">
+                    {% if recipe.image %}
+                        <img src="{{ asset('images/' ~ recipe.image) }}"
+                             alt="{{ recipe.title }}">
+                    {% endif %}
 
-        <article class="recipe-card">
-            <div class="recipe-image">
-                <img src="{{ asset('images/photo-1512621776951-a57141f2eefd.jfif') }}" alt="Домашний ягодный пирог">
-                <span>ДЕСЕРТЫ</span>
-            </div>
-            <div class="recipe-info">
-                <h3>Домашний ягодный пирог</h3>
-                <p>Нежная выпечка для семейного чаепития.</p>
-                <span class="recipe-time">◷ 60 минут</span>
-            </div>
-        </article>
+                    <span>{{ recipe.category|upper }}</span>
+                </div>
+
+                <div class="recipe-info">
+                    <h3>{{ recipe.title }}</h3>
+                    <p>{{ recipe.description }}</p>
+                    <span class="recipe-time">
+                        ◷ {{ recipe.cookingTime }} минут
+                    </span>
+                </div>
+            </a>
+        {% else %}
+            <p>Пока рецептов нет. Скоро здесь появятся вкусные блюда!</p>
+        {% endfor %}
+    </div>
+
+    <div style="text-align: center; margin-top: 35px;">
+        <a href="{{ path('app_recipes') }}" class="hero-button">
+            Все рецепты
+        </a>
     </div>
 </section>
 
@@ -150,7 +145,7 @@
 
     .popular {
         padding-top: 75px;
-        padding-bottom: 30px;
+        padding-bottom: 50px;
     }
 
     .section-heading {
@@ -175,39 +170,37 @@
     }
 
     .recipe-card {
+        display: block;
         background: white;
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 5px 20px rgba(61, 48, 41, 0.07);
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.2s;
     }
 
-.recipe-image {
-    height: 190px;
-    position: relative;
-    overflow: hidden;
-}
+    .recipe-card:hover {
+        transform: translateY(-5px);
+    }
 
-.recipe-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
+    .recipe-image {
+        height: 190px;
+        position: relative;
+        overflow: hidden;
+    }
 
-.recipe-image span {
-    position: absolute;
-    bottom: 18px;
-    left: 18px;
-    background: white;
-    color: #b85c38;
-    padding: 7px 12px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
+    .recipe-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
 
     .recipe-image span {
+        position: absolute;
+        bottom: 18px;
+        left: 18px;
         background: white;
         color: #b85c38;
         padding: 7px 12px;
@@ -215,18 +208,6 @@
         font-size: 11px;
         font-weight: 700;
         letter-spacing: 1px;
-    }
-
-    .soup-image {
-        background: linear-gradient(135deg, #e8c8a5, #bd8b60);
-    }
-
-    .salad-image {
-        background: linear-gradient(135deg, #c8d6a0, #7e9b63);
-    }
-
-    .dessert-image {
-        background: linear-gradient(135deg, #edc1b1, #c98270);
     }
 
     .recipe-info {
