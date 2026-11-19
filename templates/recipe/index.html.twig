@@ -13,6 +13,13 @@
             <p>Выбирайте любимые блюда и вдохновляйтесь на новые кулинарные открытия!</p>
         </div>
 
+        <div class="category-filters">
+            <button class="category-button active" data-category="all">Все рецепты</button>
+            <button class="category-button" data-category="супы">Супы</button>
+            <button class="category-button" data-category="салаты">Салаты</button>
+            <button class="category-button" data-category="десерты">Десерты</button>
+        </div>
+
         <div class="recipe-search">
             <input
                 type="text"
@@ -26,6 +33,7 @@
             {% for recipe in recipes %}
                 <article
                     class="recipe-card"
+                    data-category="{{ recipe.category|lower }}"
                     data-search="{{ (recipe.title ~ ' ' ~ recipe.category ~ ' ' ~ recipe.description)|lower }}"
                 >
                     <div class="recipe-image">
@@ -67,7 +75,7 @@
         </div>
 
         <p id="noResults" class="no-results" hidden>
-            К сожалению, ничего не найдено. Попробуйте другое название.
+            К сожалению, ничего не найдено. Попробуйте изменить поиск или категорию.
         </p>
     </div>
 </section>
@@ -98,6 +106,32 @@
     .catalog-heading p {
         color: #82756b;
         line-height: 1.6;
+    }
+
+    .category-filters {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 30px;
+    }
+
+    .category-button {
+        padding: 11px 22px;
+        border: 1px solid #e5d5c8;
+        border-radius: 25px;
+        background: white;
+        color: #3d3029;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .category-button:hover,
+    .category-button.active {
+        background: #b85c38;
+        color: white;
+        border-color: #b85c38;
     }
 
     .recipe-search {
@@ -243,8 +277,11 @@
         const searchInput = document.getElementById('recipeSearch');
         const recipeCards = document.querySelectorAll('.recipe-card');
         const noResults = document.getElementById('noResults');
+        const categoryButtons = document.querySelectorAll('.category-button');
 
-        searchInput.addEventListener('input', function () {
+        let selectedCategory = 'all';
+
+        function filterRecipes() {
             const searchText = searchInput.value
                 .trim()
                 .toLocaleLowerCase('ru-RU');
@@ -255,16 +292,40 @@
                 const recipeText = card.dataset.search
                     .toLocaleLowerCase('ru-RU');
 
-                const matches = recipeText.includes(searchText);
+                const recipeCategory = card.dataset.category
+                    .toLocaleLowerCase('ru-RU');
 
-                card.hidden = !matches;
+                const matchesSearch = recipeText.includes(searchText);
 
-                if (matches) {
+                const matchesCategory =
+                    selectedCategory === 'all' ||
+                    recipeCategory === selectedCategory;
+
+                const isVisible = matchesSearch && matchesCategory;
+
+                card.hidden = !isVisible;
+
+                if (isVisible) {
                     visibleCount++;
                 }
             });
 
             noResults.hidden = visibleCount > 0;
+        }
+
+        searchInput.addEventListener('input', filterRecipes);
+
+        categoryButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                categoryButtons.forEach(function (item) {
+                    item.classList.remove('active');
+                });
+
+                button.classList.add('active');
+                selectedCategory = button.dataset.category;
+
+                filterRecipes();
+            });
         });
     });
 </script>
