@@ -1,0 +1,113 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Редактировать рецепт — Вкусно дома{% endblock %}
+
+{% block body %}
+
+<div class="container" style="max-width: 750px; margin: 50px auto; padding: 30px;">
+
+    <h1 style="font-family: 'Playfair Display', serif;">
+        Редактировать рецепт
+    </h1>
+
+    <p style="color: #82756b; margin-bottom: 30px;">
+        Измените нужную информацию и сохраните обновлённый рецепт.
+    </p>
+
+    <form method="post" enctype="multipart/form-data">
+
+        <label>Название рецепта</label>
+        <input type="text" name="title" value="{{ recipe.title }}" required>
+
+        <label>Описание блюда</label>
+        <textarea name="description" rows="3" required>{{ recipe.description }}</textarea>
+
+        <label>Категория</label>
+        <select name="category" required>
+            <option value="Супы" {% if recipe.category == 'Супы' %}selected{% endif %}>Супы</option>
+            <option value="Салаты" {% if recipe.category == 'Салаты' %}selected{% endif %}>Салаты</option>
+            <option value="Основные блюда" {% if recipe.category == 'Основные блюда' %}selected{% endif %}>Основные блюда</option>
+            <option value="Десерты" {% if recipe.category == 'Десерты' %}selected{% endif %}>Десерты</option>
+        </select>
+
+        <label>Время приготовления (минуты)</label>
+        <input type="number" name="cookingTime" min="1" value="{{ recipe.cookingTime }}" required>
+
+        <label>Текущая фотография</label>
+
+        {% if recipe.image %}
+            <img
+                src="{{ asset('images/' ~ recipe.image) }}"
+                alt="{{ recipe.title }}"
+                style="display: block; max-width: 250px; margin: 10px 0; border-radius: 8px;"
+            >
+        {% else %}
+            <p>Фотография пока не добавлена.</p>
+        {% endif %}
+
+        <label>Загрузить новую фотографию (необязательно)</label>
+        <input type="file" name="image" accept="image/jpeg,image/png,image/webp">
+
+        <label>Количество порций</label>
+        <input type="number" name="servings" min="1" value="{{ recipe.servings }}" required>
+
+        <label>Ингредиенты</label>
+        <textarea name="ingredients" rows="6" required>{{ recipe.ingredients }}</textarea>
+
+        <label>Приготовление</label>
+        <textarea name="instructions" rows="7" required>{{ recipe.instructions }}</textarea>
+
+        <button type="submit">Сохранить изменения</button>
+
+    </form>
+
+    <a href="{{ path('app_recipe_detail', {id: recipe.id}) }}"
+       style="display: inline-block; margin-top: 20px; color: #b85c38;">
+        ← Вернуться к рецепту
+    </a>
+
+</div>
+
+<style>
+    form label {
+        display: block;
+        margin: 20px 0 8px;
+        font-weight: 600;
+        color: #3d3029;
+    }
+
+    form input,
+    form textarea,
+    form select {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px;
+        border: 1px solid #e5d5c7;
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 15px;
+        background: white;
+    }
+
+    form textarea {
+        resize: vertical;
+    }
+
+    form button {
+        margin-top: 25px;
+        padding: 14px 25px;
+        border: none;
+        border-radius: 6px;
+        background: #b85c38;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    form button:hover {
+        background: #98472b;
+    }
+</style>
+
+{% endblock %}

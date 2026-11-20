@@ -11,6 +11,11 @@
         ← Вернуться к рецептам
     </a>
 
+    <a href="{{ path('app_edit_recipe', {id: recipe.id}) }}"
+       class="action-button edit-button">
+        ✏️ Редактировать рецепт
+    </a>
+
     <div class="recipe-header">
         <div>
             <span class="category-label">{{ recipe.category|upper }}</span>
@@ -95,8 +100,15 @@
     }
 
     .back-link {
+        display: inline-block;
         color: #b85c38;
         text-decoration: none;
+        margin-right: 20px;
+    }
+
+    .edit-button {
+        display: inline-block;
+        margin: 15px 0;
     }
 
     .recipe-header {
@@ -204,6 +216,10 @@
         border-radius: 6px;
         text-decoration: none;
         margin-top: 15px;
+    }
+
+    .action-button:hover {
+        background: #98472b;
     }
 
     @media (max-width: 750px) {
