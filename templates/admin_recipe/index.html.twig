@@ -19,7 +19,7 @@
         <p style="color: green;">{{ message }}</p>
     {% endfor %}
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
 
         <label>Название рецепта</label>
         <input type="text" name="title" required>
@@ -39,8 +39,8 @@
         <label>Время приготовления (минуты)</label>
         <input type="number" name="cookingTime" min="1" required>
 
-        <label>Название файла фотографии</label>
-        <input type="text" name="image" placeholder="например, soup.jpg">
+        <label>Фотография блюда</label>
+        <input type="file" name="image" accept="image/jpeg,image/png,image/webp">
 
         <label>Количество порций</label>
         <input type="number" name="servings" min="1" value="2" required>
