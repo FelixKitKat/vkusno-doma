@@ -11,10 +11,23 @@
         ← Вернуться к рецептам
     </a>
 
-    <a href="{{ path('app_edit_recipe', {id: recipe.id}) }}"
-       class="action-button edit-button">
-        ✏️ Редактировать рецепт
-    </a>
+    <div class="recipe-actions">
+        <a href="{{ path('app_edit_recipe', {id: recipe.id}) }}"
+           class="action-button edit-button">
+            ✏️ Редактировать рецепт
+        </a>
+
+        <form
+            method="post"
+            action="{{ path('app_delete_recipe', {id: recipe.id}) }}"
+            onsubmit="return confirm('Вы действительно хотите удалить этот рецепт?');"
+            class="delete-form"
+        >
+            <button type="submit" class="delete-button">
+                🗑 Удалить рецепт
+            </button>
+        </form>
+    </div>
 
     <div class="recipe-header">
         <div>
@@ -103,12 +116,45 @@
         display: inline-block;
         color: #b85c38;
         text-decoration: none;
-        margin-right: 20px;
     }
 
-    .edit-button {
+    .recipe-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 20px 0;
+    }
+
+    .action-button {
         display: inline-block;
-        margin: 15px 0;
+        background: #b85c38;
+        color: white;
+        padding: 13px 22px;
+        border-radius: 6px;
+        text-decoration: none;
+        margin-top: 15px;
+    }
+
+    .action-button:hover {
+        background: #98472b;
+    }
+
+    .delete-form {
+        margin: 15px 0 0;
+    }
+
+    .delete-button {
+        padding: 13px 22px;
+        border: none;
+        border-radius: 6px;
+        background: #a83232;
+        color: white;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    .delete-button:hover {
+        background: #812525;
     }
 
     .recipe-header {
@@ -206,20 +252,6 @@
 
     .rating {
         color: #b85c38;
-    }
-
-    .action-button {
-        display: inline-block;
-        background: #b85c38;
-        color: white;
-        padding: 13px 22px;
-        border-radius: 6px;
-        text-decoration: none;
-        margin-top: 15px;
-    }
-
-    .action-button:hover {
-        background: #98472b;
     }
 
     @media (max-width: 750px) {
