@@ -55,7 +55,7 @@
 
         nav {
             display: flex;
-            gap: 28px;
+            gap: 20px;
             align-items: center;
         }
 
@@ -68,16 +68,23 @@
             color: #b85c38;
         }
 
-        nav .add-recipe-link {
+        nav .add-recipe-link,
+        nav .login-link {
             background: #b85c38;
             color: white;
             padding: 11px 17px;
             border-radius: 6px;
         }
 
-        nav .add-recipe-link:hover {
+        nav .add-recipe-link:hover,
+        nav .login-link:hover {
             background: #98472b;
             color: white;
+        }
+
+        nav .logout-link {
+            color: #b85c38;
+            font-weight: 700;
         }
 
         main {
@@ -120,9 +127,19 @@
             <a href="{{ path('app_recipes') }}">Рецепты</a>
             <a href="{{ path('app_recipes') }}">Категории</a>
             <a href="#about">О проекте</a>
-            <a href="{{ path('app_admin_recipe') }}" class="add-recipe-link">
-                + Добавить рецепт
-            </a>
+
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_admin_recipe') }}" class="add-recipe-link">
+                    + Добавить рецепт
+                </a>
+                <a href="{{ path('app_logout') }}" class="logout-link">
+                    Выйти
+                </a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="login-link">
+                    Войти
+                </a>
+            {% endif %}
         </nav>
     </div>
 </header>

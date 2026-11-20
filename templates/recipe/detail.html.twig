@@ -11,23 +11,28 @@
         ← Вернуться к рецептам
     </a>
 
-    <div class="recipe-actions">
-        <a href="{{ path('app_edit_recipe', {id: recipe.id}) }}"
-           class="action-button edit-button">
-            ✏️ Редактировать рецепт
-        </a>
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="recipe-actions">
+            <a href="{{ path('app_edit_recipe', {id: recipe.id}) }}"
+               class="action-button edit-button">
+                ✏️ Редактировать рецепт
+            </a>
 
-        <form
-            method="post"
-            action="{{ path('app_delete_recipe', {id: recipe.id}) }}"
-            onsubmit="return confirm('Вы действительно хотите удалить этот рецепт?');"
-            class="delete-form"
-        >
-            <button type="submit" class="delete-button">
-                🗑 Удалить рецепт
-            </button>
-        </form>
-    </div>
+            <form
+                method="post"
+                action="{{ path('app_delete_recipe', {id: recipe.id}) }}"
+                onsubmit="return confirm('Вы действительно хотите удалить этот рецепт?');"
+                class="delete-form"
+            >
+                <input type="hidden" name="_token"
+                       value="{{ csrf_token('delete_recipe_' ~ recipe.id) }}">
+
+                <button type="submit" class="delete-button">
+                    🗑 Удалить рецепт
+                </button>
+            </form>
+        </div>
+    {% endif %}
 
     <div class="recipe-header">
         <div>
@@ -268,6 +273,11 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const servingsElement = document.getElementById('servings');
+
+        if (!servingsElement) {
+            return;
+        }
+
         const quantities = document.querySelectorAll('.quantity');
 
         const originalServings = Number(servingsElement.textContent);
